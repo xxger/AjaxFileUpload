@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <title>避免form标签嵌套</title>
+
+	<script type="text/javascript" src="jquery-1.7.2-min.js"></script>
+	<script type="text/javascript" src="../jquery.ajaxfileupload.js"></script>
+  <script type="text/javascript">
+    $(function() {
+function applyAjaxFileUpload(element) {
+	var interval;
+	$(element).AjaxFileUpload({
+		action: "upload.php",
+		onChange: function(filename) {
+			var str = "上传中...";
+			var idname = "."+$(this).attr('id');
+			var upload_path = $(idname).prev().html(str);
+		},
+		onSubmit: function(filename) {
+			return true;
+		},
+		onComplete: function(filename, response) {
+			window.clearInterval(interval);
+			var idname = "."+$(this).attr('id');
+			$(idname).prev().html(filename + " ");
+
+			if(typeof(response.error) === "string") {
+
+				alert(response.error);
+
+				return;
+			}
+		}
+	});
+
+  	$(".uploadify_h").click(function(e){
+		uploadifyh();
+	});
+	function uploadifyh(e){
+	$("#uploadify_h").click();
+	e.preventDefault();
+	}
+}
+
+	applyAjaxFileUpload("#uploadify_h");
+	});
+  </script>
+</head>
+
+<body>
+
+ 	<form action="" mathod="post">
+			<p><label>姓名：</label><input type="text" /></p>
+			<p><label>电话：</label><input type="text" /></p>
+            <div class="upload_c">
+              <div class="upload_path"></div>
+              	<span class="file-btn uploadify_h">拍照或扫描件上传</span>
+            </div> 
+        </form>
+        <form method="post" action="" enctype="multipart/form-data">
+			<input type="file" name="file" id="uploadify_h" class="upload_hide" style="display:none;" />
+		</form>
+        
+</body>
+</html>
